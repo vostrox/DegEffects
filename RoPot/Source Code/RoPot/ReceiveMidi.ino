@@ -1,3 +1,6 @@
+const byte ControlChangeByte = 1011;
+const byte ProgramChangeByte = 1100;
+
 void CheckMidi()
 {
   do
