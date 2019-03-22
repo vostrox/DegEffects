@@ -30,6 +30,11 @@ void Logger::Initialise(bool enabled)
 
 void Logger::Error(String message)
 {
+  if (_enabled == NULL)
+  {
+	return;
+  }
+  
   if (_enabled && Serial)
   {
     Serial.println("Error: " + message);
@@ -38,6 +43,11 @@ void Logger::Error(String message)
 
 void Logger::Warning(String message)
 {
+  if (_enabled == NULL)
+  {
+	return;
+  }
+  
   if (_enabled && Serial)
   {
     Serial.println("Warning: " + message);
@@ -46,6 +56,11 @@ void Logger::Warning(String message)
 
 void Logger::Info(String message)
 {
+  if (_enabled == NULL)
+  {
+	return;
+  }
+  
   if (_enabled && Serial)
   {
     Serial.println("Info: " + message);
