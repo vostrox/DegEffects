@@ -1,7 +1,34 @@
+#include "Arduino.h"
+#include "Midi.h"
+
+const int MidiBaudRate = 31250;
+
 const byte ControlChangeByte = 1011;
 const byte ProgramChangeByte = 1100;
 
-void CheckMidi()
+byte ChannelNumber = 15;
+
+Midi::Midi(void)
+{
+  
+}
+
+Midi::~Midi(void)
+{
+  if (Serial1)
+  {
+    Serial1.flush();
+    Serial1.end();
+  }
+}
+
+void Midi::Initialise()
+{
+  Serial1.begin(MidiBaudRate);
+  while(!Serial1);
+}
+
+void Midi::CheckMidi()
 {
   do
   {

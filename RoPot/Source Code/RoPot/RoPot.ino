@@ -1,20 +1,20 @@
 #include "src/Logger/Logger.h"
+#include "Midi.h"
 
 const int MillisecondsToWaitBetweenEachMidiRxCheck = 100;
-const int MidiBaudRate = 31250;
-byte ChannelNumber = 15;
 Logger logger;
+Midi midi;
 
 void setup()
 {
   logger.Initialise(true);
-  Serial1.begin(MidiBaudRate);
-  while(!Serial1);
+  midi.Initialise();
+  
   logger.Error("Test");
 }
 
 void loop()
 {
-  CheckMidi();
+  midi.CheckMidi();
   delay(MillisecondsToWaitBetweenEachMidiRxCheck);
 }
