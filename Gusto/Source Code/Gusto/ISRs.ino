@@ -1,23 +1,27 @@
-volatile double previousTapTime = 0;
+volatile double _previousTapTime = 0;
 
 void TapPressed()
 {  
+  noInterrupts();
+  
   double newTime = millis();
-  double tempMs = newTime - previousTapTime;
+  double tempMs = newTime - _previousTapTime;
 
   if (tempMs > TIME_TAP_RESET_MILLISECONDS)
   {
-    previousTapTime = newTime;
+    _previousTapTime = newTime;
   }
   else if (tempMs >= TIME_DEBOUNCE_WAIT_MILLISECONDS)
   {
-    previousTapTime = newTime;
+    _previousTapTime = newTime;
 
     if (tempMs >= TIME_MINIMUM_DELAY_MILLISECONDS && tempMs <= TIME_MAXIMUM_DELAY_MILLISECONDS)
     {
       TempoMs = tempMs;
     }
   }
+  
+  interrupts();
 }
 
 void Modulate()
@@ -26,8 +30,8 @@ void Modulate()
   CheckSubDivisionSwitch();
   CheckModulationSwitch();
   
-  double modDepth = MODULATION_DEPTH_LIGHT;
-  double modSpeed = MODULATION_SPEED_LIGHT;
+  double modDepth = 0;
+  double modSpeed = 0;
   
   switch (ModulationType)
   {
@@ -35,7 +39,9 @@ void Modulate()
       UpdateWiperPosition(0);
       return;
     case MODULATION_TYPE_LIGHT:
-      break;
+	    modDepth = MODULATION_DEPTH_LIGHT;
+      modSpeed = MODULATION_SPEED_LIGHT;
+	  break;
     case MODULATION_TYPE_DEEP:
       modDepth = MODULATION_DEPTH_DEEP;
       modSpeed = MODULATION_SPEED_DEEP;  

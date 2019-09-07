@@ -1,12 +1,16 @@
+#define KNOB_ERROR_VOLTS 0.1
+
+double _previousKnobVoltage = 0;
+
 void CheckTimeKnob()
 {
   int value = analogRead(PIN_TIME_KNOB);
   double voltage = value * (5.0 / 1023.0);
   
   double timeMs = (voltage / 5.0) * (TIME_MAXIMUM_DELAY_MILLISECONDS - TIME_MINIMUM_DELAY_MILLISECONDS) + TIME_MINIMUM_DELAY_MILLISECONDS;
-
-  double difference = timeMs - TempoMs;
-  if (abs(difference) >= TIME_KNOB_ERROR_MILLISECONDS)
+  
+  //Check that the knob has moved
+  if (abs(voltage - _previousKnobVoltage) >= KNOB_ERROR_VOLTS)
   {
     TempoMs = timeMs;
   }

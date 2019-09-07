@@ -12,11 +12,11 @@
 
 #define TIME_MINIMUM_DELAY_MILLISECONDS 40
 #define TIME_MAXIMUM_DELAY_MILLISECONDS 800
-#define TIME_KNOB_ERROR_MILLISECONDS 10
+//#define TIME_MAXIMUM_DELAY_MILLISECONDS 1221
 #define TIME_DEBOUNCE_WAIT_MILLISECONDS 100
 #define TIME_TAP_RESET_MILLISECONDS 5000
 #define TIME_TIMER_SAMPLE_DELAY_MICROSECONDS 20000
-#define TIME_LED_ON_MILLISECONDS 30
+#define TIME_LED_ON_MILLISECONDS 50
 #define TIME_DEFAULT_DELAY_MILLISECONDS 500
 
 #define SUBDIVISION_QUARTER 0
@@ -30,9 +30,6 @@
 #define MODULATION_DEPTH_DEEP 5.0
 #define MODULATION_SPEED_LIGHT 1.0
 #define MODULATION_SPEED_DEEP 1.5
-#define MODULATION_ERROR_CORRECTION 0.5
-
-#define MAXIMUM_WIPER_VALUE 1023
 
 double TempoMs = TIME_DEFAULT_DELAY_MILLISECONDS;
 int ModulationType = MODULATION_TYPE_OFF;
@@ -46,7 +43,7 @@ void setup()
   pinMode(PIN_SPI_SLAVESELECT, OUTPUT);
   pinMode(PIN_TAP, INPUT_PULLUP);
 
-  InitialiseMidi();
+  //InitialiseMidi();
   
   SPI.begin();
   //SPI.setBitOrder(MSBFIRST);
@@ -58,12 +55,12 @@ void setup()
   Timer1.initialize(TIME_TIMER_SAMPLE_DELAY_MICROSECONDS);
   Timer1.attachInterrupt(Modulate);
   
-  attachInterrupt(digitalPinToInterrupt(PIN_TAP), TapPressed, FALLING);
+  attachInterrupt(digitalPinToInterrupt(PIN_TAP), TapPressed, RISING);
 }
 
 void loop()
 {
-  CheckMidi();
+  //CheckMidi();
   FlashLED();
   delay(TempoMs - TIME_LED_ON_MILLISECONDS);
 }

@@ -1,3 +1,6 @@
+#define MODULATION_ERROR_CORRECTION 0.5
+#define MAXIMUM_WIPER_VALUE 1023
+
 void FlashLED()
 {
   //TAP ON STATE (primary colours)
@@ -13,8 +16,8 @@ void FlashLED()
   if (SubDivision == SUBDIVISION_QUARTER)
   {
     redOn = HIGH;
-	greenOn = HIGH;
-	blueOn = HIGH;
+	  greenOn = HIGH;
+	  blueOn = HIGH;
   }
   else if (SubDivision == SUBDIVISION_EIGHTHS)
   {
@@ -30,9 +33,9 @@ void FlashLED()
   digitalWrite(PIN_LED_BLUE, blueOn);
   
   delay(TIME_LED_ON_MILLISECONDS);
-  
+
   //TAP OFF STATE (secondary colours)
-  //	- Black	  - No mod
+  //	  - Black	  - No mod
   //RB  - Magenta - Deep mod
   //GB  - Cyan    - Light mod
   //RG	- Yellow  - MIDI changes to mod
@@ -47,13 +50,13 @@ void FlashLED()
   }
   else if (ModulationType == MODULATION_TYPE_LIGHT)
   {
-    redOn = HIGH;
-	greenOn = HIGH;
+    greenOn = HIGH;
+	  blueOn = HIGH;
   }
   else if (ModulationType == MODULATION_TYPE_DEEP)
   {
     redOn = HIGH;
-	blueOn = HIGH;
+	  blueOn = HIGH;
   }
   
   digitalWrite(PIN_LED_RED, redOn);
@@ -63,12 +66,14 @@ void FlashLED()
 
 void UpdateWiperPosition(double mod)
 {
+  noInterrupts();
+  
   double delayMs = TempoMs;
   
   //calculate delayMs from tempoMs and subDivision
   if (SubDivision == SUBDIVISION_EIGHTHS)
   {
-    delayMs = TempoMs * 0.5;
+    delayMs = TempoMs / 2;
   }      
   else if (SubDivision == SUBDIVISION_DOTTEDEIGHTHS)
   {
@@ -101,4 +106,6 @@ void UpdateWiperPosition(double mod)
   SPI.transfer(highByte(wiperValue<<6));
   SPI.transfer(lowByte(wiperValue<<6));
   digitalWrite(PIN_SPI_SLAVESELECT, HIGH);
+
+  interrupts();
 }
