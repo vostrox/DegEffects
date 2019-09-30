@@ -14,7 +14,7 @@ void TapPressed()
   else if (tempMs >= TIME_DEBOUNCE_WAIT_MILLISECONDS)
   {
     _previousTapTime = newTime;
-
+    
     if (tempMs >= TIME_MINIMUM_DELAY_MILLISECONDS && tempMs <= TIME_MAXIMUM_DELAY_MILLISECONDS)
     {
       TempoMs = tempMs;

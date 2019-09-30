@@ -9,31 +9,29 @@ void FlashLED()
   //G   - Green   - Dotted Eighth
   //B   - Blue    - MIDI changes to tap
   
-  auto redOn = LOW;
-  auto greenOn = LOW;
-  auto blueOn = LOW;
+  bool redOn = LOW;
+  bool greenOn = LOW;
+  bool blueOn = LOW;
 
   if (SubDivision == SUBDIVISION_QUARTER)
   {
     redOn = HIGH;
-	  greenOn = HIGH;
-	  blueOn = HIGH;
   }
   else if (SubDivision == SUBDIVISION_EIGHTHS)
   {
-    redOn = HIGH;
+    greenOn = HIGH;
   }
   else if (SubDivision == SUBDIVISION_DOTTEDEIGHTHS)
   {
-    greenOn = HIGH;
+    blueOn = HIGH;
   }
-
+  
   digitalWrite(PIN_LED_RED, redOn);
   digitalWrite(PIN_LED_GREEN, greenOn);
   digitalWrite(PIN_LED_BLUE, blueOn);
   
   delay(TIME_LED_ON_MILLISECONDS);
-
+    
   //TAP OFF STATE (secondary colours)
   //	  - Black	  - No mod
   //RB  - Magenta - Deep mod
@@ -50,15 +48,15 @@ void FlashLED()
   }
   else if (ModulationType == MODULATION_TYPE_LIGHT)
   {
-    greenOn = HIGH;
-	  blueOn = HIGH;
+    //greenOn = HIGH;
+	  //blueOn = HIGH;
   }
   else if (ModulationType == MODULATION_TYPE_DEEP)
   {
-    redOn = HIGH;
-	  blueOn = HIGH;
+    //redOn = HIGH;
+	  //blueOn = HIGH;
   }
-  
+
   digitalWrite(PIN_LED_RED, redOn);
   digitalWrite(PIN_LED_GREEN, greenOn);
   digitalWrite(PIN_LED_BLUE, blueOn);
@@ -93,7 +91,10 @@ void UpdateWiperPosition(double mod)
   
   unsigned int wiperValue = ((delayMs - TIME_MINIMUM_DELAY_MILLISECONDS) / (TIME_MAXIMUM_DELAY_MILLISECONDS - TIME_MINIMUM_DELAY_MILLISECONDS)) * MAXIMUM_WIPER_VALUE;
   wiperValue = constrain(wiperValue, 0, MAXIMUM_WIPER_VALUE);
-    
+
+  //invert wiper value
+  wiperValue = MAXIMUM_WIPER_VALUE - wiperValue;
+  
   //  we need to investigate the relationship between the wiper position and the delay time
   //  is the delay time directly proportional to the wiper position?
   //  do we need to invert the value?
@@ -106,6 +107,6 @@ void UpdateWiperPosition(double mod)
   SPI.transfer(highByte(wiperValue<<6));
   SPI.transfer(lowByte(wiperValue<<6));
   digitalWrite(PIN_SPI_SLAVESELECT, HIGH);
-
+  
   interrupts();
 }
